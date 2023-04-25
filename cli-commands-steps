@@ -1,31 +1,46 @@
-These are the steps/commands to be performed in the command prompt or cli as given below !
+1(ospf,ntp,ssh)- ntp on timing change, open router cli en, conf t, ntp server 192.168.1.2 , ntp up, ntp update-calender, exit ,show clock
 
-1(ospf,ntp,ssh)- ntp on timing change, open router cli en, conf t, ntp server 192.168.1.2 , ntp up, update-calender, exit, exit ,show clock
+Router cli conf t, logging 192.168.1.3,exit,
 
-Router cli conf t, logging 192.168.1.3,exit,exit
+(conf t,ip domain-name tolani.com,hostname R1,crypto key generate rsa,1024,line vty 0 4, transport input ssh, login local, exit, #username tolani privilege 15 password cisco)if password wrong
 
 ssh -L tolani 192.168.3.1 , cisco
 
-
-
 2(aaa auth)- pc0 telnet 192.168.2.1 username tolani password tolani
-
 
 3(extended acls ipv4)- pc0  url 192.168.1.3 pc1 url 192.168.1.3
 
+router 1 en,  conf t, access-list 100 permit tcp host 192.168.3.2 host 192.168.1.2 eq ftp, interface GigabitEthernet0/0, ip access-group 100 out,  exit     go to cmd pc0 and pc1 192.168.1.2
 
 5(ipv6 acls)- pc0 and pc1 web browser 2005::2
 Pc 0 ping 2005::2
 
-
 6(zone based firewall)- router1 cli en, Router#show policy-map type inspect zone-pair sessions
-
 
 Pc0 we browser 192.168.1.2
 
 Pc to server ping 192.168.4.2
 Server to pc ping 192.168.4.2
 
-
-
 8(layer 2 security).  SwitchA cli  en, show port-security int f0/1
+
+SwitchA>en
+SwitchA#conf t
+SwitchA(config)#int range f0/1-2
+SwitchA(config-if-range)#spanning-tree portfast
+SwitchB>en
+SwitchB#conf t
+SwitchB(config)#int range f0/1-2
+SwitchB(config-if-range)#spanning-tree portfast      (stp attack)
+
+
+for port security SwitchA and also b >en 
+SwitchA#conf t
+SwitchA(config)#int range f0/1-2
+SwitchA(config-if-range)#switchport mode access
+SwitchA(config-if-range)#switchport port-security
+SwitchA(config-if-range)#switchport port-security maximum 2
+SwitchA(config-if-range)#switchport port-security violation shutdown
+SwitchA(config-if-range)#switchport port-security mac-address sticky
+
+Switch 0 cli show spanning-tree
